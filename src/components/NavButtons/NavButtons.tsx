@@ -1,43 +1,14 @@
 import React from "react";
-import { serviceStateChanger } from "../../types/types";
 
-const NavButtons: React.FC<{ serviceStateChanger: serviceStateChanger }> = ({
-  serviceStateChanger,
-}) => {
+import { NavLink } from "react-router-dom";
+
+const NavButtons: React.FC = () => {
   return (
-    <ul>
-      <li>
-        <button
-          type="button"
-          onClick={() => {
-            serviceStateChanger("Count");
-          }}
-        >
-          Counter (Redux Toolkit)
-        </button>
-      </li>
-
-      <li>
-        <button
-          type="button"
-          onClick={() => {
-            serviceStateChanger("UsersOperationGET");
-          }}
-        >
-          Async Redux simple GET
-        </button>
-      </li>
-      <li>
-        <button
-          type="button"
-          onClick={() => {
-            serviceStateChanger("UsersAdvancedOperations");
-          }}
-        >
-          Users Operations
-        </button>
-      </li>
-    </ul>
+    <nav>
+      <NavLink to="redux_counter">Counter (Redux Toolkit)</NavLink>
+      <NavLink to="redux_simple_get">Async Redux simple GET</NavLink>
+      <NavLink to="redux_advanced_async">Users Operations</NavLink>
+    </nav>
   );
 };
 

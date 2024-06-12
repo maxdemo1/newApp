@@ -20,7 +20,7 @@ export interface setOpenServicesComponent extends setOpenServices {
 }
 export type usersProps = {
   userData: userData;
-  showButtons: boolean;
+  advancedOptions: boolean;
 };
 
 export type userData = {

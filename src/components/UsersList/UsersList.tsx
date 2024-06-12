@@ -1,6 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useTypedDispatch, useTypedSelector } from "../../redux/hooks/hooks";
+import { getUsers } from "../../redux/AsyncGet/operations";
+import SimpleUserData from "../UserCard/UserCard";
+import { useLocation } from "react-router-dom";
 
 const UsersList = () => {
+  const [advancedOption, setAdvancedOptions] = useState(false);
+  const location = useLocation();
+
+  const dispatch = useTypedDispatch();
+  const {
+    data: usersData,
+    isError,
+    isLoading,
+  } = useTypedSelector((state) => state.asyncGetReducer);
+
+  useEffect(() => {
+    if (location.pathname === "/redux_advanced_async") {
+      setAdvancedOptions(true);
+    } else {
+      setAdvancedOptions(false);
+    }
+    dispatch(getUsers());
+  }, [location.pathname, dispatch]);
   return (
     <>
       {!isLoading && (
@@ -11,7 +33,7 @@ const UsersList = () => {
                 <SimpleUserData
                   key={user.id}
                   userData={user}
-                  showButtons={false}
+                  advancedOptions={advancedOption}
                 />
               );
             })}

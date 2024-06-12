@@ -1,51 +1,38 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, { Suspense, lazy } from "react";
 
 import "./App.css";
-import { OpenServices, serviceStateChanger } from "./types/types";
+
 import Loading from "./components/Loading/Loading";
-import NavButtons from "./components/NavButtons/NavButtons";
-import TitleChange from "./components/TitleChange/TitleChange";
-const Count = lazy(() => import("./components/Count/Count"));
-const UsersOperationGET = lazy(
-  () => import("./components/UsersOperationGET/UsersOperationGET")
+
+import HomePage from "./Pages/HomePage";
+
+import { Route, Routes } from "react-router-dom";
+import WelcomePage from "./Pages/WelcomePage";
+import Redirect from "./components/Redirect/Redirect";
+
+const CountPage = lazy(() => import("./Pages/CountPage"));
+const UsersOperationGETPage = lazy(
+  () => import("./Pages/UsersOperationGETPage")
 );
-const UsersAdvancedOperations = lazy(
-  () => import("./components/UserOperations/UsersAdvancedOperations")
+const UsersAdvancedOperationsPage = lazy(
+  () => import("./Pages/UsersAdvancedOperationsPage")
 );
 
 const App: React.FC = () => {
-  const [openServices, setOpenServices] = useState<OpenServices>({
-    Count: false,
-    UsersOperationGET: false,
-    UsersAdvancedOperations: false,
-  });
-
-  useEffect(() => {}, [openServices]);
-
-  const serviceStateChanger: serviceStateChanger = (nameOfService) => {
-    const servicesNames = Object.keys(openServices);
-    const newObj: { [key: string]: boolean } = {};
-    servicesNames.forEach((name: string) => {
-      newObj[name] = false;
-    });
-
-    setOpenServices((prev) => {
-      return { ...prev, ...newObj, [nameOfService]: true };
-    });
-  };
-
   return (
     <Suspense fallback={<Loading />}>
-      <TitleChange componentName="AppCollection" />
-      <NavButtons serviceStateChanger={serviceStateChanger} />
+      <HomePage />
 
-      {openServices.Count && <Count setOpenServices={setOpenServices} />}
-      {openServices.UsersOperationGET && (
-        <UsersOperationGET setOpenServices={setOpenServices} />
-      )}
-      {openServices.UsersAdvancedOperations && (
-        <UsersAdvancedOperations setOpenServices={setOpenServices} />
-      )}
+      <Routes>
+        <Route path="/" element={<WelcomePage />} />
+        <Route path="redux_counter" element={<CountPage />} />
+        <Route path="redux_simple_get" element={<UsersOperationGETPage />} />
+        <Route
+          path="redux_advanced_async"
+          element={<UsersAdvancedOperationsPage />}
+        />
+        <Route path="*" element={<Redirect />} />
+      </Routes>
     </Suspense>
   );
 };

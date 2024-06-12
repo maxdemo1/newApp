@@ -5,11 +5,11 @@ import {
   incrementCount,
 } from "../../redux/Count/slice";
 import { useTypedDispatch, useTypedSelector } from "../../redux/hooks/hooks";
-import { setOpenServices } from "../../types/types";
-import CloseMiniApp from "../CloseMiniApp/CloseMiniApp";
-import TitleChange from "../TitleChange/TitleChange";
 
-const Count: React.FC<setOpenServices> = ({ setOpenServices }) => {
+import TitleChange from "../TitleChange/TitleChange";
+import ToHome from "../ToHome/ToHome";
+
+const Count: React.FC = () => {
   const incrementValue = useRef<HTMLInputElement>(null);
   const decrementValue = useRef<HTMLInputElement>(null);
 
@@ -37,7 +37,7 @@ const Count: React.FC<setOpenServices> = ({ setOpenServices }) => {
   return (
     <div>
       <TitleChange componentName={Count.name} />
-      <CloseMiniApp setOpenServices={setOpenServices} appName={Count.name} />
+      <ToHome />
       <form onSubmit={(e) => incrementState(e)}>
         <input type="number" ref={incrementValue} name="incrementField" />
         <button type="submit">Increment</button>
