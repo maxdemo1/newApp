@@ -24,6 +24,7 @@ export type usersProps = {
 };
 
 export type userData = {
+  [key: string]: string | number;
   id: number;
   name: string;
   username: string;

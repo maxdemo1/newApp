@@ -1,24 +1,83 @@
-import React from "react";
-import { usersProps } from "../../types/types";
+import React, { useState } from "react";
+import { userData, usersProps } from "../../types/types";
+import { useTypedDispatch } from "../../redux/hooks/hooks";
+import { deleteUser, editUser } from "../../redux/Users/operations";
+import { Field, Form, Formik } from "formik";
 
-const SimpleUserData: React.FC<usersProps> = ({
-  userData,
-  advancedOptions,
-}) => {
-  const { name, username, email } = userData;
+const UserCard: React.FC<usersProps> = ({ userData, advancedOptions }) => {
+  const [editState, setEditState] = useState(false);
+  const { name, username, email, id } = userData;
+  const dispatch = useTypedDispatch();
+
+  const changeUserData = (values: userData) => {
+    if (
+      Object.keys(values).filter((key) => values[key] === userData[key])
+        .length === 4
+    ) {
+      console.log("nope");
+      return;
+    }
+
+    dispatch(editUser(values));
+  };
+
   return (
     <div style={{ border: "1px, solid, black" }}>
       {advancedOptions && (
         <div>
-          <button>Delete</button>
-          <button>Edit</button>
+          <button
+            onClick={() => {
+              dispatch(deleteUser(id));
+            }}
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => {
+              setEditState(!editState);
+            }}
+          >
+            Edit
+          </button>
+          {editState && (
+            <>
+              <button form={"user" + id} type="submit">
+                Save
+              </button>
+              <button
+                onClick={() => {
+                  setEditState(!editState);
+                }}
+              >
+                Cancel
+              </button>
+            </>
+          )}
         </div>
       )}
-      <p>{name}</p>
-      <p>{username}</p>
-      <p>{email}</p>
+      {!editState ? (
+        <div>
+          <p>Name</p>
+          <p>{name}</p>
+          <p>UserName</p>
+          <p>{username}</p>
+          <p>Email</p>
+          <p>{email}</p>
+        </div>
+      ) : (
+        <Formik initialValues={{ ...userData }} onSubmit={changeUserData}>
+          <Form id={"user" + id}>
+            <p>Name</p>
+            <Field autoFocus type="text" name="name" />
+            <p>UserName</p>
+            <Field type="text" name="username" />
+            <p>Email</p>
+            <Field type="text" name="email" />
+          </Form>
+        </Formik>
+      )}
     </div>
   );
 };
 
-export default SimpleUserData;
+export default UserCard;

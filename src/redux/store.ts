@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { countReducer } from "./Count/slice";
-import { asyncGetReducer } from "./AsyncGet/slice";
+import { asyncGetReducer } from "./Users/slice";
 
 const rootReducer = combineReducers({
   countReducer,
