@@ -21,6 +21,8 @@ export interface setOpenServicesComponent extends setOpenServices {
 export type usersProps = {
   userData: userData;
   advancedOptions: boolean;
+  editedContact: setEditedContact;
+  setEditedContact: React.Dispatch<React.SetStateAction<setEditedContact>>;
 };
 
 export type userData = {
@@ -36,3 +38,5 @@ export interface AsyncGetState {
   isLoading: boolean;
   isError: string;
 }
+
+export type setEditedContact = boolean | number;

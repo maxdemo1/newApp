@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import UserCard from "../UserCard/UserCard";
 
 const UsersList = () => {
+  const [editedContact, setEditedContact] = useState<boolean | number>(false);
   const [advancedOption, setAdvancedOptions] = useState(false);
   const location = useLocation();
 
@@ -36,6 +37,8 @@ const UsersList = () => {
                 key={user.id}
                 userData={user}
                 advancedOptions={advancedOption}
+                editedContact={editedContact}
+                setEditedContact={setEditedContact}
               />
             );
           })}

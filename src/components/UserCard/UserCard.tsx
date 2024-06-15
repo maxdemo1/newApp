@@ -4,7 +4,12 @@ import { useTypedDispatch } from "../../redux/hooks/hooks";
 import { deleteUser, editUser } from "../../redux/Users/operations";
 import { Field, Form, Formik } from "formik";
 
-const UserCard: React.FC<usersProps> = ({ userData, advancedOptions }) => {
+const UserCard: React.FC<usersProps> = ({
+  userData,
+  advancedOptions,
+  editedContact,
+  setEditedContact,
+}) => {
   const [editState, setEditState] = useState(false);
   const { name, username, email, id } = userData;
   const dispatch = useTypedDispatch();
@@ -14,7 +19,7 @@ const UserCard: React.FC<usersProps> = ({ userData, advancedOptions }) => {
       Object.keys(values).filter((key) => values[key] === userData[key])
         .length === 4
     ) {
-      console.log("nope");
+      setEditedContact(false);
       return;
     }
 
@@ -35,11 +40,12 @@ const UserCard: React.FC<usersProps> = ({ userData, advancedOptions }) => {
           <button
             onClick={() => {
               setEditState(!editState);
+              setEditedContact(userData.id);
             }}
           >
             Edit
           </button>
-          {editState && (
+          {editedContact === userData.id && (
             <>
               <button form={"user" + id} type="submit">
                 Save
@@ -55,7 +61,7 @@ const UserCard: React.FC<usersProps> = ({ userData, advancedOptions }) => {
           )}
         </div>
       )}
-      {!editState ? (
+      {!(editedContact === userData.id) ? (
         <div>
           <p>Name</p>
           <p>{name}</p>
