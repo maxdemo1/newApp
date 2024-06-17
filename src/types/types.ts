@@ -37,6 +37,7 @@ export interface AsyncGetState {
   data: userData[];
   isLoading: boolean;
   isError: string;
+  query: string;
 }
 
 export type setEditedContact = boolean | number;

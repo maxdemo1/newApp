@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { userData, usersProps } from "../../types/types";
 import { useTypedDispatch } from "../../redux/hooks/hooks";
 import { deleteUser, editUser } from "../../redux/Users/operations";
@@ -10,7 +10,6 @@ const UserCard: React.FC<usersProps> = ({
   editedContact,
   setEditedContact,
 }) => {
-  const [editState, setEditState] = useState(false);
   const { name, username, email, id } = userData;
   const dispatch = useTypedDispatch();
 
@@ -24,10 +23,11 @@ const UserCard: React.FC<usersProps> = ({
     }
 
     dispatch(editUser(values));
+    setEditedContact(false);
   };
 
   return (
-    <div style={{ border: "1px, solid, black" }}>
+    <li style={{ border: "1px, solid, black" }}>
       {advancedOptions && (
         <div>
           <button
@@ -39,7 +39,6 @@ const UserCard: React.FC<usersProps> = ({
           </button>
           <button
             onClick={() => {
-              setEditState(!editState);
               setEditedContact(userData.id);
             }}
           >
@@ -52,7 +51,7 @@ const UserCard: React.FC<usersProps> = ({
               </button>
               <button
                 onClick={() => {
-                  setEditState(!editState);
+                  setEditedContact(false);
                 }}
               >
                 Cancel
@@ -82,7 +81,7 @@ const UserCard: React.FC<usersProps> = ({
           </Form>
         </Formik>
       )}
-    </div>
+    </li>
   );
 };
 

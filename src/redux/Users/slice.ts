@@ -6,25 +6,37 @@ const initialState: AsyncGetState = {
   data: [],
   isLoading: false,
   isError: "",
+  query: "",
+};
+
+const loadingErrorFulfiled = (state: Omit<AsyncGetState, "data" | "query">) => {
+  state.isError = "";
+  state.isLoading = false;
+};
+const loadingErrorPending = (state: Omit<AsyncGetState, "data" | "query">) => {
+  state.isError = "";
+  state.isLoading = true;
 };
 
 const AsyncGetSlice = createSlice({
   name: "AsyncGetSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    searchUser(state, action) {
+      state.query = action.payload;
+    },
+  },
   extraReducers: (builer) => {
     builer
       .addCase(
         getUsers.fulfilled,
         (state, action: PayloadAction<userData[]>) => {
-          state.isLoading = false;
-          state.isError = "";
+          loadingErrorFulfiled(state);
           state.data = action.payload;
         }
       )
       .addCase(getUsers.pending, (state) => {
-        state.isLoading = true;
-        state.isError = "";
+        loadingErrorPending(state);
         state.data = [];
       })
       .addCase(getUsers.rejected, (state, action) => {
@@ -33,10 +45,7 @@ const AsyncGetSlice = createSlice({
           ? action.payload.toString()
           : "Unknown Error";
       })
-      .addCase(deleteUser.pending, (state) => {
-        state.isLoading = true;
-        state.isError = "";
-      })
+      .addCase(deleteUser.pending, loadingErrorPending)
       .addCase(deleteUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = action.payload
@@ -44,14 +53,10 @@ const AsyncGetSlice = createSlice({
           : "Unknown Error";
       })
       .addCase(deleteUser.fulfilled, (state, action: PayloadAction<number>) => {
-        state.isError = "";
-        state.isLoading = false;
+        loadingErrorFulfiled(state);
         state.data = state.data.filter((user) => user.id !== action.payload);
       })
-      .addCase(editUser.pending, (state) => {
-        state.isLoading = true;
-        state.isError = "";
-      })
+      .addCase(editUser.pending, loadingErrorPending)
       .addCase(editUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = action.payload
@@ -59,16 +64,14 @@ const AsyncGetSlice = createSlice({
           : "Unknown Error";
       })
       .addCase(editUser.fulfilled, (state, action: PayloadAction<userData>) => {
-        state.isLoading = false;
-        state.isError = "";
-        state.data = [...state.data];
-        console.log(
+        loadingErrorFulfiled(state);
+        state.data[
           state.data.findIndex((user) => {
             return user.id === action.payload.id;
           })
-        );
+        ] = action.payload;
       });
   },
 });
-
+export const { searchUser } = AsyncGetSlice.actions;
 export const asyncGetReducer = AsyncGetSlice.reducer;

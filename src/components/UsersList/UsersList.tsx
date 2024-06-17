@@ -4,6 +4,8 @@ import { getUsers } from "../../redux/Users/operations";
 
 import { useLocation } from "react-router-dom";
 import UserCard from "../UserCard/UserCard";
+import { selectFilteredContacts } from "../../redux/Users/selectors";
+import Loading from "../Loading/Loading";
 
 const UsersList = () => {
   const [editedContact, setEditedContact] = useState<boolean | number>(false);
@@ -11,11 +13,10 @@ const UsersList = () => {
   const location = useLocation();
 
   const dispatch = useTypedDispatch();
-  const {
-    data: usersData,
-    isError,
-    isLoading,
-  } = useTypedSelector((state) => state.asyncGetReducer);
+  const { isError, isLoading } = useTypedSelector(
+    (state) => state.asyncGetReducer
+  );
+  const usersData = useTypedSelector(selectFilteredContacts);
 
   useEffect(() => {
     if (location.pathname === "/redux_advanced_async") {
@@ -29,8 +30,9 @@ const UsersList = () => {
   return (
     <>
       <ul>
-        {isLoading && <h2>Loading...</h2>}
+        {isLoading && <Loading />}
         {usersData &&
+          usersData?.length !== 0 &&
           usersData.map((user) => {
             return (
               <UserCard

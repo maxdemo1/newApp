@@ -66,3 +66,5 @@ export const editUser = createAsyncThunk(
     }
   }
 );
+
+export const createUser = createAsyncThunk();

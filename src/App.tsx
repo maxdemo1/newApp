@@ -22,7 +22,6 @@ const App: React.FC = () => {
   return (
     <Suspense fallback={<Loading />}>
       <HomePage />
-
       <Routes>
         <Route path="/" element={<WelcomePage />} />
         <Route path="redux_counter" element={<CountPage />} />
